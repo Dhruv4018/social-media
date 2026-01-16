@@ -2,13 +2,18 @@ import nodemailer from "nodemailer"
 import dotenv from "dotenv"
 dotenv.config()
 const transporter = nodemailer.createTransport({
-  service: "gmail",
-  // port: 465,
-  // secure: true, 
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true, // Port 465 ke liye hamesha true
   auth: {
     user: process.env.EMAIL,
-    pass: process.env.EMAIL_PASS,
+    pass: process.env.EMAIL_PASS, // Wahi 16-digit App Password
   },
+  tls: {
+    // Ye line Google ke "Website not available" block ko bypass karne mein madad karti hai
+    rejectUnauthorized: false,
+    minVersion: "TLSv1.2"
+  }
 });
 
 const sendMail = async(to ,otp)=>{
@@ -24,3 +29,4 @@ const sendMail = async(to ,otp)=>{
 }
 
 export default sendMail
+
