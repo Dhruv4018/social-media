@@ -19,7 +19,7 @@ const port = process.env.PORT
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "https://social-media-z1z0.onrender.com",
     credentials: true
 }))
 
@@ -31,3 +31,4 @@ app.use("/api/story", storyRouter)
 app.use("/api/message", messageRouter)
 
 server.listen(port, () => { connectDb(), console.log("Server started") })
+
