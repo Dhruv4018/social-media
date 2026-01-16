@@ -6,14 +6,14 @@ const transporter = nodemailer.createTransport({
   port: 465,
   secure: true, 
   auth: {
-    user: "dhruvjain78791999@gmail.com",
-    pass: "rtsd bqgb fuun wbyu",
+    user: process.env.EMAIL,
+    pass: process.env.PASS,
   },
 });
 
 const sendMail = async(to ,otp)=>{
    await transporter.sendMail({
-        from:"dhruvjain78791999@gmail.com",
+        from:process.env.EMAIL,
         to,
         subject:"Reset Your Password",
        html: `<p>Your OTP for password reset is <b>${otp}</b>. It expires in 5 minutes.</p>`
