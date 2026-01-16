@@ -100,7 +100,7 @@ const ForgotPassword = () => {
           </div>
 
           <button
-            className='w-[70%] h-[50px] bg-black text-white font-semibold rounded-2xl mt-[30px]'
+            className='w-[70%] h-[50px] bg-black text-white font-semibold rounded-2xl mt-[30px] cursor-pointer'
             disabled={loading}
             onClick={handlesendOtp}
           >
@@ -135,7 +135,7 @@ const ForgotPassword = () => {
           </div>
 
           <button
-            className='w-[70%] h-[50px] bg-black text-white font-semibold rounded-2xl mt-[30px]'
+            className='w-[70%] h-[50px] bg-black text-white font-semibold rounded-2xl mt-[30px] cursor-pointer'
             disabled={loading}
             onClick={handleOtp}
           >
@@ -192,7 +192,7 @@ const ForgotPassword = () => {
           </div>
 
           <button
-            className='w-[70%] h-[50px] bg-black text-white font-semibold rounded-2xl mt-[30px]'
+            className='w-[70%] h-[50px] bg-black text-white font-semibold rounded-2xl mt-[30px] cursor-pointer'
             disabled={loading}
             onClick={handleresetPassword}
           >
