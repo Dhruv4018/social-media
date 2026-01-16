@@ -28,7 +28,7 @@ import Search from './pages/Search'
 import useAllNotification from './hooks/useAllNotification'
 import Notification from './pages/Notification'
 import { setNotificationData } from './redux/userSlice'
-export const ServerUrl = "http://localhost:8000"
+export const ServerUrl = "https://social-media-backend-7tyi.onrender.com"
 const App = () => {
   useCurrent()
   useSuggested()
