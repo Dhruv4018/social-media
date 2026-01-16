@@ -3,6 +3,8 @@ import User from "../models/user.model.js"
 import bcrypt from "bcryptjs"
 import genToken from "../config/token.js"
 import sendMail from "../config/mail.js"
+import dotenv from 'dotenv';
+dotenv.config();
 export const signUp = async (req, res) => {
     try {
         const { name, email, password, userName } = req.body
@@ -29,8 +31,8 @@ export const signUp = async (req, res) => {
         let token = await genToken(user._id)
         res.cookie("token", token, {
             httpOnly: true,
-            secure: false,
-            sameSite: "Strict",
+            secure: true,
+            sameSite: "None",
             maxAge: 20 * 365 * 24 * 60 * 60 * 1000
 
 
@@ -60,8 +62,8 @@ export const login = async (req, res) => {
         let token = await genToken(user._id)
         res.cookie("token", token, {
             httpOnly: true,
-            secure: false,
-            sameSite: "Strict",
+            secure: true,
+            sameSite: "None",
             maxAge: 20 * 365 * 24 * 60 * 60 * 1000
 
 
@@ -77,7 +79,12 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
     try {
-        await res.clearCookie("token")
+        await res.clearCookie("token", {
+          httpOnly: true,
+           secure: true,
+           sameSite: "None"
+});
+
         return res.status(200).json({ message: "logout successfully" })
     } catch (error) {
         return res.status(500).json({ message: "Logot error" })
@@ -148,4 +155,8 @@ export const resetPassword = async (req,res)=>{
     } catch (error) {
         return res.status(400).json({message:"verified otp error"})
     }
+
 }
+
+
+
