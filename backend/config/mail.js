@@ -8,7 +8,7 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 const sendMail = async (to, otp) => {
   try {
     await resend.emails.send({
-      from: "onboarding@resend.dev",
+      from: process.env.EMAIL_RESEND,
       to,
       subject: "Reset Your Password",
       html: `
