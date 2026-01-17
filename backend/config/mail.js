@@ -1,28 +1,52 @@
-import { Resend } from "resend"
-import dotenv from "dotenv"
+import nodemailer from 'nodemailer';
 
-dotenv.config()
+export const sendEmail = async (data) => {
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, 
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS, 
+    },
+    // YE ADD KARNA ZAROORI HAI PRODUCTION KE LIYE
+    tls: {
+      rejectUnauthorized: false 
+    }
+  });
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+  // 1. Connection Verify (Promise ke saath)
+  await new Promise((resolve, reject) => {
+    transporter.verify(function (error, success) {
+      if (error) {
+        console.log("Connection Error:", error);
+        reject(error);
+      } else {
+        console.log("Server ready for messages");
+        resolve(success);
+      }
+    });
+  });
 
-const sendMail = async (to, otp) => {
-  try {
-    await resend.emails.send({
-      from: process.env.EMAIL_RESEND,
-      to,
-      subject: "Reset Your Password",
-      html: `
-        <p>Your OTP for password reset is:</p>
-        <h2>${otp}</h2>
-        <p>This OTP will expire in 5 minutes.</p>
-      `,
-    })
+  // 2. Email Sending (Promise ke saath)
+  const mailOptions = {
+    from: `My App <${process.env.EMAIL_USER}>`, // Professional format
+    to: data.to,
+    subject: data.subject,
+    text: data.text,
+    html: data.html || data.text, // HTML support bhi rakho
+  };
 
-    console.log("✅ OTP email sent via Resend")
-  } catch (error) {
-    console.error("❌ Email send failed:", error)
-    throw error
-  }
-}
-
-export default sendMail
+  return await new Promise((resolve, reject) => {
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) {
+        console.error("Mail Send Error:", err);
+        reject(err);
+      } else {
+        console.log("Email Sent Successfully");
+        resolve(info);
+      }
+    });
+  });
+};
