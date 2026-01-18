@@ -39,7 +39,7 @@ export const signUp = async (req, res) => {
 
         })
 
-        return res.status(201).json(user)
+        return res.status(201).json( user)
 
 
     } catch (error) {
@@ -70,7 +70,7 @@ export const login = async (req, res) => {
 
         })
 
-        return res.status(201).json(user)
+        return res.status(201).json( user )
 
 
     } catch (error) {
@@ -81,10 +81,10 @@ export const login = async (req, res) => {
 export const logout = async (req, res) => {
     try {
         await res.clearCookie("token", {
-            httpOnly: true,
-            secure: true,
-            sameSite: "None"
-        });
+          httpOnly: true,
+           secure: true,
+           sameSite: "None"
+});
 
         return res.status(200).json({ message: "logout successfully" })
     } catch (error) {
@@ -104,62 +104,57 @@ export const sendOtp = async (req, res) => {
         const otp = Math.floor(1000 + Math.random() * 9000).toString()
 
         user.resetOtp = otp
-        user.otpExpires = Date.now() + 5 * 60 * 1000
+        user.otpExpires =  Date.now() + 5 * 60 * 1000
         user.isOtpVerified = false
         await user.save()
 
-        // Is line ko dhyan se replace karein
-        await sendEmail({
-            to: email,
-            subject: "Your OTP for Password Reset",
-            text: `Aapka OTP hai: ${otp}`
-        });
+       await sendEmail(email , otp)
 
-        return res.status(200).json({ message: "email successfully send otp " })
+       return res.status(200).json({message:"email successfully send otp "})
 
     } catch (error) {
-        return res.status(500).json({ message: "sendotp error " })
+    return res.status(500).json({ message: "sendotp error " })
 
 
     }
 }
 
-export const verifyOtp = async (req, res) => {
+export const verifyOtp = async(req,res)=>{
     try {
-        const { email, otp } = req.body
-        const user = await User.findOne({ email })
-        if (!user || user.resetOtp !== otp || user.otpExpires < Date.now()) {
-            return res.status(400).json({ message: "Invalid otp/ expired otp" })
+        const {email , otp} = req.body
+        const user = await User.findOne({email})
+        if(!user || user.resetOtp !==otp || user.otpExpires< Date.now()){
+            return res.status(400).json({message:"Invalid otp/ expired otp"})
         }
 
         user.isOtpVerified = true
         user.resetOtp = undefined
         user.otpExpires = undefined
         await user.save()
-        return res.status(200).json({ message: "otp verified" })
+         return res.status(200).json({message:"otp verified"})
     } catch (error) {
-        return res.status(400).json({ message: "verified otp error" })
+         return res.status(400).json({message:"verified otp error"})
     }
 }
 
 
-export const resetPassword = async (req, res) => {
+export const resetPassword = async (req,res)=>{
     try {
-        const { email, password } = req.body
+        const {email , password } = req.body
         const user = await User.findOne({ email })
-        if (!user || !user.isOtpVerified) {
+         if (!user || !user.isOtpVerified) {
             return res.status(400).json({ message: "otp verification required " })
 
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10)
-        user.password = hashedPassword
-        user.isOtpVerified = false
-        await user.save()
+        const hashedPassword = await bcrypt.hash(password , 10)
+         user.password = hashedPassword
+         user.isOtpVerified = false
+         await user.save()
 
-        return res.status(200).json({ message: "password reset successfully" })
+         return res.status(200).json({message:"password reset successfully"})
     } catch (error) {
-        return res.status(400).json({ message: "verified otp error" })
+        return res.status(400).json({message:"verified otp error"})
     }
 
 }
